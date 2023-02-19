@@ -7,7 +7,6 @@ ngrok.exe
 ./models
 api.js
 config.js
-index.js
 logger.js
 package.json
 package-lock.json
