@@ -9,14 +9,12 @@ module.exports = {
   intervalReserver:  (3 * 3600) + (0 * 60),
   textStartSuperUser: ` слушаюсь и повинуюсь`,
   timeAdjustmentInterval(minutes) {
-    console.log(minutes)
+   
     const TIME_ONE_MINUTES = 50
     if (minutes > TIME_ONE_MINUTES) {
-      console.log(Math.abs(minutes - TIME_ONE_MINUTES))
       return Math.abs(minutes - TIME_ONE_MINUTES) 
     }
     if (minutes <= 0) {
-      console.log(Math.abs(minutes))
       return Math.abs(minutes)
     }
     return minutes

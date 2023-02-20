@@ -18,7 +18,7 @@ dayjs.extend(utc);
 mongoose.set("strictQuery", false);
 mongoose.connect(config.DB_URL, (err) => {
     if (err) throw err;
-    console.log("MongoDb connected");
+    console.log("MongoDb connected")
 });
 
 const bot = new TelegramApi(config.TOKEN, { polling: true });
@@ -76,7 +76,7 @@ bot.on("callback_query", async (query) => {
         });
        
         const reservedUsers = calendarReserved[0].reservedUsers;
-        console.log(reservedUsers)
+       
         const searchUserReservedIndex = reservedUsers.findIndex((user) => user.userId === userInfo.userId);
         const inlineButton = new ButtonMenu(helper.month, helper.daysOfWeek, reservedUsers);
         const buttonReserveTime = new ButtonReserveTime(helper.reservedHours, helper.reservedMinutes, reservedUsers);
@@ -154,7 +154,6 @@ bot.on("callback_query", async (query) => {
 
                 break;
             case "reservedDate":
-                console.log(buttonReserveTime.getButtonReservedTime(params.date));
                 try {
                     await bot.editMessageText(`Запись на ${helper.month[+params.date.month]} ${params.date.day}. Веберите Удобное Для Вас Время`, {
                         chat_id: userInfo.chatId,
@@ -167,7 +166,6 @@ bot.on("callback_query", async (query) => {
                 }
                 break;
             case "reservedTime":
-                console.log(params);
                 const searchUserReserved = reservedUsers?.find((user) => user.userId === userInfo.userId);
                 if (!searchUserReserved) {
                     const reservedUser = {

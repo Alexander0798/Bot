@@ -58,15 +58,6 @@ module.exports = class ButtonReserveTime {
       return reservedTime;
     });
 
-    // this.buttonTime = this.buttonTime.filter((button) =>
-    //   console.log(button);
-    //   // this.dateReserved = helper.getDateReserved(button.date, helper.month)
-    //   this.reservedTime = this.reservedUsers?.find(
-    //     (user) => user.dataReserve.day === dateReserved.day && user.dataReserve.month === 1 && user.dataReserve.hour === hour
-    //   );
-    //   this.reservedTimeExecution = this.reservedUsers?.find((user) => user.dataReserve.day === dateReserved.day && user.dataReserve.hour === hour);
-    //   return;
-    // });
     return { reply_markup: JSON.stringify({ inline_keyboard: this.defaultButton.concat(this.buttonTime) }) };
   }
 };
