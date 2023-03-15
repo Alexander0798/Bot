@@ -19,8 +19,8 @@ module.exports = {
     text: 'Отменить запись',
     callback_data:  JSON.stringify({type: 'confirmedUserMerged'})
   },
-  superUser: {
-    text: 'Записи',
-    callback_data:  JSON.stringify({type: 'records'})
+  sActiveReserved: {
+    text: 'Активные Записи',
+    callback_data:  JSON.stringify({type: 'sActiveReserved'})
   }
 };

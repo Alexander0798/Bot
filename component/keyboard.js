@@ -47,11 +47,11 @@ module.exports = {
       },
     ],
   ],
-  superUser: [
+  sHome: [
     [
       {
-        text: `${kb.superUser.text}`,
-        callback_data: kb.userReserved.callback_data,
+        text: `${kb.sActiveReserved.text}`,
+        callback_data: kb.sActiveReserved.callback_data,
       },
     ],
   ],

@@ -12,13 +12,14 @@ const dayjs = require("dayjs");
 const tz = require("dayjs-timezone-iana-plugin");
 const utc = require("dayjs/plugin/utc");
 const helper = require("./helper.js");
+const ActiveReserveSuperUser = require('./component/ActiveReserveSuperUser.js')
 dayjs.extend(tz);
 dayjs.extend(utc);
-//fsdf
+
 mongoose.set("strictQuery", false);
 mongoose.connect(config.DB_URL, (err) => {
     if (err) throw err;
-    console.log("MongoDb connected")
+    console.log("MongoDb connected");
 });
 
 const bot = new TelegramApi(config.TOKEN, { polling: true });
@@ -35,8 +36,12 @@ bot.on("message", async (msg) => {
 });
 
 bot.onText(/\/start/, async (msg) => {
+    
     const userInfo = user.info(msg);
-
+    if (userInfo.userId === helper.superUserId) {
+        bot.sendMessage(userInfo.chatId, helper.textStartSuperUser, { reply_markup: JSON.stringify({ inline_keyboard: keyboard.sHome }) });
+        return;
+    }
     const searchCustomerAccount = await CustomerAccount.find({
         userId: userInfo.userId,
     });
@@ -68,18 +73,27 @@ bot.onText(/\/start/, async (msg) => {
 });
 bot.on("callback_query", async (query) => {
     const userInfo = user.info(query);
+    console.log(query)
     const data = query.data;
     if (JSON.parse(data)) {
         const params = JSON.parse(data);
         const calendarReserved = await CalendarReserved.find({
             superUserId: helper.superUserId,
         });
-       
+
         const reservedUsers = calendarReserved[0].reservedUsers;
-       
+
         const searchUserReservedIndex = reservedUsers.findIndex((user) => user.userId === userInfo.userId);
         const inlineButton = new ButtonMenu(helper.month, helper.daysOfWeek, reservedUsers);
         const buttonReserveTime = new ButtonReserveTime(helper.reservedHours, helper.reservedMinutes, reservedUsers);
+        if (userInfo.userId === helper.superUserId) {
+            switch (params.type) {
+                case "sActiveReserved":
+                const activeReserveSuperUser = new ActiveReserveSuperUser(reservedUsers)
+                    bot.sendMessage(userInfo.chatId, helper.textStartSuperUser, activeReserveSuperUser.getButtonEntries())
+                    return;
+            }
+        }
         switch (params.type) {
             case "reserve":
                 try {
@@ -173,6 +187,7 @@ bot.on("callback_query", async (query) => {
                         message_id: userInfo.messageId,
                         userId: userInfo.userId,
                         userName: userInfo.userName,
+                        userUrl: userInfo.userUrl,
                         date: params.date,
                         dataReserve: helper.getDateReserved(params.date, helper.month),
                     };
